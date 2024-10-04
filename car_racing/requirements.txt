@@ -1,0 +1,5 @@
+gymnasium
+swig
+box2d-py
+pygame
+zmq
