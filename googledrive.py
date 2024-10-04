@@ -1,5 +1,5 @@
-import datasponge as ds
-from datasponge import source
+import datasponge.core as ds
+from datasponge.core import source
 
 circuit = (
     source.GoogleDriveSource(

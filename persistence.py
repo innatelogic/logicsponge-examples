@@ -1,7 +1,7 @@
 import time
 
-import datasponge as ds
-from datasponge.datasponge import Dump
+import datasponge.core as ds
+from datasponge.core.datasponge import Dump
 
 
 class Source(ds.SourceTerm):

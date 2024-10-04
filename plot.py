@@ -4,8 +4,8 @@ from typing import ClassVar, TypedDict
 import matplotlib.pyplot as plt
 import pint
 
-import datasponge as ds
-from datasponge import plot
+import datasponge.core as ds
+from datasponge.core import plot
 
 u = pint.UnitRegistry()
 

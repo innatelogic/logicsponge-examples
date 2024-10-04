@@ -3,7 +3,7 @@ from typing import ClassVar, TypedDict
 
 import pint
 
-import datasponge as ds
+import datasponge.core as ds
 
 u = pint.UnitRegistry()
 

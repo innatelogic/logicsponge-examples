@@ -1,7 +1,7 @@
 import zmq
 
-import datasponge as ds
-from datasponge import dashboard
+import datasponge.core as ds
+from datasponge.core import dashboard
 
 
 class ZeroMQSource(ds.SourceTerm):

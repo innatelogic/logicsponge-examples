@@ -4,7 +4,7 @@ from typing import ClassVar, TypedDict
 # import innatelogic.v2.circuits.platereader as pr
 import pint
 
-import datasponge as ds
+import datasponge.core as ds
 
 u = pint.UnitRegistry()
 

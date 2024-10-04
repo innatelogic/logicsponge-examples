@@ -1,6 +1,6 @@
-import datasponge as ds
-from datasponge.file import CSVStreamer
-from datasponge.stats import Sum
+import datasponge.core as ds
+from datasponge.core.file import CSVStreamer
+from datasponge.core.stats import Sum
 
 
 class FloatConverter(ds.FunctionTerm):

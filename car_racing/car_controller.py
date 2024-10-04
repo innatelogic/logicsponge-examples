@@ -1,8 +1,8 @@
 import numpy as np
 import zmq
 
-import datasponge as ds
-from datasponge import dashboard, stats
+import datasponge.core as ds
+from datasponge.core import dashboard, stats
 
 
 class Car(ds.FunctionTerm):

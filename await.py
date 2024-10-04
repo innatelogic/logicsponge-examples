@@ -2,7 +2,7 @@ import random
 import time
 from datetime import UTC, datetime
 
-import datasponge as ds
+import datasponge.core as ds
 
 
 class Source(ds.SourceTerm):
