@@ -1,7 +1,6 @@
+import datasponge.core as ds
 import numpy as np
 import zmq
-
-import datasponge.core as ds
 from datasponge.core import dashboard, stats
 
 
@@ -70,9 +69,7 @@ class Policy(ds.FunctionTerm):
 car = Car()
 policy = Policy()
 total_reward = (
-    stats.Sum(key="reward")
-    * ds.AddIndex(key="index")
-    * dashboard.Plot("cumulated reward", x="index", y=["sum"])
+    stats.Sum(key="reward") * ds.AddIndex(key="index") * dashboard.Plot("cumulated reward", x="index", y=["sum"])
 )
 
 circuit = car * (policy * car | total_reward)

@@ -1,9 +1,8 @@
 import time
 from typing import ClassVar, TypedDict
 
-import pint
-
 import datasponge.core as ds
+import pint
 
 u = pint.UnitRegistry()
 

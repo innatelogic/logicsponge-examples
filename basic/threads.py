@@ -1,24 +1,23 @@
 import time
 from typing import ClassVar, TypedDict
 
-import matplotlib.pyplot as plt
-import pint
-
 import datasponge.core as ds
-from datasponge.core import plot
+
+# import innatelogic.v2.circuits.platereader as pr
+import pint
 
 u = pint.UnitRegistry()
 
 
 class SourceState(TypedDict):
-    time: float
-    cells: float
+    time: float  # pint.Quantity
+    cells: float  # pint.Quantity
 
 
 class Source(ds.SourceTerm):
     state: ClassVar[SourceState] = {
-        "time": 0,
-        "cells": 10,
+        "time": 0,  # * u.min,
+        "cells": 10,  # / u.mL,
     }
 
     def run(self):
@@ -33,31 +32,23 @@ class Source(ds.SourceTerm):
         self.output(out)
 
         # update state
-        self.state["time"] += 5
+        self.state["time"] += 5  # * u.min
         self.state["cells"] *= 1.1
 
         # time to measure...
-        time.sleep(0.5)
+        time.sleep(1.5)
 
 
 class Fit(ds.FunctionTerm):
     def f(self, item: ds.DataItem) -> ds.DataItem:
         print("Fit: received", item)
-        time.sleep(0.1)
-        out = ds.DataItem({"time": item["time"], "2xcells": 2 * item["cells"]})
+        k = 0
+        for i in range(10000000):
+            k += i
+        out = ds.DataItem({"time": item["time"], "cells": k})
         print("Fit: send", out)
         return out
 
 
-circuit = (
-    Source()
-    * ds.Print()
-    * plot.Plot(x="time", y="cells")
-    * Fit()
-    * plot.Plot(x="time", y="2xcells")
-    * plot.Plot(y="2xcells")
-    * plot.Plot()
-)
-
+circuit = Source() * (Fit("a") | Fit("b") | Fit("c") | Fit("d") | Fit("e") | Fit("f") | Fit("g") | Fit("h"))
 circuit.start()
-plt.show()

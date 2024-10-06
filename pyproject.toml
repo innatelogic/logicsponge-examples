@@ -530,8 +530,7 @@ select = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"**/examples/*" = ["INP001", "T201"]
-"**/tests/**/*" = ["INP001", "PLC1901", "PLR2004", "PLR6301", "S", "TID252"]
+"*" = ["FA102", "INP001", "T201"]
 
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"

@@ -1,6 +1,5 @@
-import zmq
-
 import datasponge.core as ds
+import zmq
 from datasponge.core import dashboard
 
 
@@ -8,9 +7,7 @@ class ZeroMQSource(ds.SourceTerm):
     port: int
     socket_type: int
 
-    def __init__(
-        self, *args, port: int = 5555, socket_type: int = zmq.PULL, **kwargs
-    ) -> None:
+    def __init__(self, *args, port: int = 5555, socket_type: int = zmq.PULL, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         print(f"Initializing ZeroMQ with port {port}")
         self.context = zmq.Context()
@@ -38,10 +35,7 @@ source = ZeroMQSource(socket_type=zmq.PULL)
 circuit = (
     source
     * ds.Print()
-    * (
-        dashboard.Plot("Loss", x="epoch", y=["loss"])
-        | dashboard.Plot("Accuracy", x="epoch", y=["accuracy"])
-    )
+    * (dashboard.Plot("Loss", x="epoch", y=["loss"]) | dashboard.Plot("Accuracy", x="epoch", y=["accuracy"]))
 )
 circuit.start()
 
