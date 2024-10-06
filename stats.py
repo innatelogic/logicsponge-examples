@@ -15,9 +15,7 @@ class Source(ds.SourceTerm):
     def run(self):
         while True:
             time.sleep(0.05)
-            out = DataItem(
-                {self.key: random.normalvariate(mu=self.mu, sigma=self.sigma)}
-            )
+            out = ds.DataItem({self.key: random.normalvariate(mu=self.mu, sigma=self.sigma)})
             self.output(out)
 
 
