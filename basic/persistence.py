@@ -1,13 +1,13 @@
 import time
 
-import datasponge.core as ds
-from datasponge.core.datasponge import Dump
+import logicsponge.core as ls
+from logicsponge.core.logicsponge import Dump
 
 
-class Source(ds.SourceTerm):
+class Source(ls.SourceTerm):
     def run(self):
         out = (
-            ds.DataItem({"data": 1}) if len(self._output) == 0 else ds.DataItem({"data": self._output[-1]["data"] + 1})
+            ls.DataItem({"data": 1}) if len(self._output) == 0 else ls.DataItem({"data": self._output[-1]["data"] + 1})
         )
         print("Source: send", out)
         self.output(out)
@@ -15,8 +15,8 @@ class Source(ds.SourceTerm):
         time.sleep(2)
 
 
-class Sink(ds.FunctionTerm):
-    def f(self, item: ds.DataItem) -> ds.DataItem:
+class Sink(ls.FunctionTerm):
+    def f(self, item: ls.DataItem) -> ls.DataItem:
         time.sleep(3)
         print("Sink: received", item)
         return item

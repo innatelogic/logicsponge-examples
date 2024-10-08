@@ -1,5 +1,5 @@
-import datasponge.core as ds
-from datasponge.core import source
+import logicsponge.core as ls
+from logicsponge.core import source
 
 circuit = (
     source.GoogleDriveSource(
@@ -7,6 +7,6 @@ circuit = (
         poll_interval_sec=10,
     )
     * source.StringDiff()
-    * ds.Print()
+    * ls.Print()
 )
 circuit.start()

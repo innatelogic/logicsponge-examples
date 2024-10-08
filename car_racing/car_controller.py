@@ -1,10 +1,10 @@
-import datasponge.core as ds
+import logicsponge.core as ls
 import numpy as np
 import zmq
-from datasponge.core import dashboard, stats
+from logicsponge.core import dashboard, stats
 
 
-class Car(ds.FunctionTerm):
+class Car(ls.FunctionTerm):
     def __init__(self, *args, port=5555, **kwargs):
         super().__init__(*args, **kwargs)
         self.context = zmq.Context()
@@ -22,7 +22,7 @@ class Car(ds.FunctionTerm):
 
         observation = np.array(response["observation"])
         self.output(
-            ds.DataItem(
+            ls.DataItem(
                 {
                     "observation": observation,
                     "reward": 0.0,
@@ -32,7 +32,7 @@ class Car(ds.FunctionTerm):
             )
         )
 
-    def f(self, item: ds.DataItem) -> ds.DataItem:
+    def f(self, item: ls.DataItem) -> ls.DataItem:
         action = item["action"]
         self.socket.send_json({"command": "step", "action": action})
 
@@ -49,7 +49,7 @@ class Car(ds.FunctionTerm):
         truncated = response["truncated"]
 
         # Output the new state (i.e., send it to policy)
-        return ds.DataItem(
+        return ls.DataItem(
             {
                 "observation": observation,
                 "reward": reward,
@@ -59,17 +59,17 @@ class Car(ds.FunctionTerm):
         )
 
 
-class Policy(ds.FunctionTerm):
-    def f(self, item: ds.DataItem) -> ds.DataItem:
+class Policy(ls.FunctionTerm):
+    def f(self, item: ls.DataItem) -> ls.DataItem:
         """Plug-in your own controller policy (e.g., a DQN)"""
         _ = item
-        return ds.DataItem({"action": 3})
+        return ls.DataItem({"action": 3})
 
 
 car = Car()
 policy = Policy()
 total_reward = (
-    stats.Sum(key="reward") * ds.AddIndex(key="index") * dashboard.Plot("cumulated reward", x="index", y=["sum"])
+    stats.Sum(key="reward") * ls.AddIndex(key="index") * dashboard.Plot("cumulated reward", x="index", y=["sum"])
 )
 
 circuit = car * (policy * car | total_reward)

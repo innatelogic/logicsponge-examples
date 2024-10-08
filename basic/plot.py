@@ -1,10 +1,10 @@
 import time
 from typing import ClassVar, TypedDict
 
-import datasponge.core as ds
+import logicsponge.core as ls
 import matplotlib.pyplot as plt
 import pint
-from datasponge.core import plot
+from logicsponge.core import plot
 
 u = pint.UnitRegistry()
 
@@ -14,7 +14,7 @@ class SourceState(TypedDict):
     cells: float
 
 
-class Source(ds.SourceTerm):
+class Source(ls.SourceTerm):
     state: ClassVar[SourceState] = {
         "time": 0,
         "cells": 10,
@@ -22,7 +22,7 @@ class Source(ds.SourceTerm):
 
     def run(self):
         # send measurmemt
-        out = ds.DataItem(
+        out = ls.DataItem(
             {
                 "time": self.state["time"],
                 "cells": self.state["cells"],
@@ -39,18 +39,18 @@ class Source(ds.SourceTerm):
         time.sleep(0.5)
 
 
-class Fit(ds.FunctionTerm):
-    def f(self, item: ds.DataItem) -> ds.DataItem:
+class Fit(ls.FunctionTerm):
+    def f(self, item: ls.DataItem) -> ls.DataItem:
         print("Fit: received", item)
         time.sleep(0.1)
-        out = ds.DataItem({"time": item["time"], "2xcells": 2 * item["cells"]})
+        out = ls.DataItem({"time": item["time"], "2xcells": 2 * item["cells"]})
         print("Fit: send", out)
         return out
 
 
 circuit = (
     Source()
-    * ds.Print()
+    * ls.Print()
     * plot.Plot(x="time", y="cells")
     * Fit()
     * plot.Plot(x="time", y="2xcells")

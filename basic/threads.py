@@ -1,7 +1,7 @@
 import time
 from typing import ClassVar, TypedDict
 
-import datasponge.core as ds
+import logicsponge.core as ls
 
 # import innatelogic.v2.circuits.platereader as pr
 import pint
@@ -14,7 +14,7 @@ class SourceState(TypedDict):
     cells: float  # pint.Quantity
 
 
-class Source(ds.SourceTerm):
+class Source(ls.SourceTerm):
     state: ClassVar[SourceState] = {
         "time": 0,  # * u.min,
         "cells": 10,  # / u.mL,
@@ -22,7 +22,7 @@ class Source(ds.SourceTerm):
 
     def run(self):
         # send measurmemt
-        out = ds.DataItem(
+        out = ls.DataItem(
             {
                 "time": self.state["time"],
                 "cells": self.state["cells"],
@@ -39,13 +39,13 @@ class Source(ds.SourceTerm):
         time.sleep(1.5)
 
 
-class Fit(ds.FunctionTerm):
-    def f(self, item: ds.DataItem) -> ds.DataItem:
+class Fit(ls.FunctionTerm):
+    def f(self, item: ls.DataItem) -> ls.DataItem:
         print("Fit: received", item)
         k = 0
         for i in range(10000000):
             k += i
-        out = ds.DataItem({"time": item["time"], "cells": k})
+        out = ls.DataItem({"time": item["time"], "cells": k})
         print("Fit: send", out)
         return out
 

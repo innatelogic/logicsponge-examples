@@ -1,9 +1,9 @@
-import datasponge.core as ds
+import logicsponge.core as ls
 import zmq
-from datasponge.core import dashboard
+from logicsponge.core import dashboard
 
 
-class ZeroMQSource(ds.SourceTerm):
+class ZeroMQSource(ls.SourceTerm):
     port: int
     socket_type: int
 
@@ -14,7 +14,7 @@ class ZeroMQSource(ds.SourceTerm):
         self.socket = self.context.socket(socket_type)
         self.socket.bind(f"tcp://localhost:{port}")
 
-    def receive(self) -> ds.DataItem:
+    def receive(self) -> ls.DataItem:
         # Wait for the next message
         message = self.socket.recv_json()
 
@@ -22,7 +22,7 @@ class ZeroMQSource(ds.SourceTerm):
             msg = f"Expected message to be a dictionary, got {type(message).__name__} instead"
             raise TypeError(msg)
 
-        return ds.DataItem(message)
+        return ls.DataItem(message)
 
     def run(self) -> None:
         while True:
@@ -34,7 +34,7 @@ class ZeroMQSource(ds.SourceTerm):
 source = ZeroMQSource(socket_type=zmq.PULL)
 circuit = (
     source
-    * ds.Print()
+    * ls.Print()
     * (dashboard.Plot("Loss", x="epoch", y=["loss"]) | dashboard.Plot("Accuracy", x="epoch", y=["accuracy"]))
 )
 circuit.start()

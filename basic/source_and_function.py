@@ -1,7 +1,7 @@
 import time
 from typing import ClassVar, TypedDict
 
-import datasponge.core as ds
+import logicsponge.core as ls
 import pint
 
 u = pint.UnitRegistry()
@@ -12,7 +12,7 @@ class SourceState(TypedDict):
     cells: float  # pint.Quantity
 
 
-class Source(ds.SourceTerm):
+class Source(ls.SourceTerm):
     state: ClassVar[SourceState] = {
         "time": 0,  # * u.min,
         "cells": 10,  # / u.mL,
@@ -20,7 +20,7 @@ class Source(ds.SourceTerm):
 
     def run(self):
         # send measurmemt
-        out = ds.DataItem(
+        out = ls.DataItem(
             {
                 "time": self.state["time"],
                 "cells": self.state["cells"],
@@ -37,11 +37,11 @@ class Source(ds.SourceTerm):
         time.sleep(3)
 
 
-class Fit(ds.FunctionTerm):
-    def f(self, di: ds.DataItem) -> ds.DataItem:
+class Fit(ls.FunctionTerm):
+    def f(self, di: ls.DataItem) -> ls.DataItem:
         print("Fit: received", di)
         time.sleep(0.5)
-        out = ds.DataItem({"time": di["time"], "cells": di["cells"]})
+        out = ls.DataItem({"time": di["time"], "cells": di["cells"]})
         print("Fit: send", out)
         return out
 
