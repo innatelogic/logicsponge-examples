@@ -19,10 +19,6 @@ class World(ls.FunctionTerm):
         return ls.DataItem(out)
 
 
-sponge = (
-    Hello()
-    * World()
-    * ls.Print()
-)
+sponge = Hello() * World() * ls.Print()
 
 sponge.start()
