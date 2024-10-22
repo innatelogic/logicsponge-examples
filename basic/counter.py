@@ -26,8 +26,8 @@ class Counter(ls.FunctionTerm):
     counter: int
     only_even: bool
 
-    def __init__(self, only_even, *args, **kwargs) -> None:
-        super().__init__(only_even, *args, **kwargs)
+    def __init__(self, *args, only_even: bool, **kwargs) -> None:
+        super().__init__(*args, only_even, **kwargs)
         self.counter = 0
         self.only_even = only_even
 
