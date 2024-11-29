@@ -1,5 +1,5 @@
 import logicsponge.core as ls
-from logicsponge.core.file import CSVStreamer
+from logicsponge.core.source import CSVStreamer
 from logicsponge.core.stats import Sum
 
 
