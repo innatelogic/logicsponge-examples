@@ -1,5 +1,4 @@
 import time
-from typing import ClassVar, TypedDict
 
 import logicsponge.core as ls
 import matplotlib.pyplot as plt
@@ -9,16 +8,13 @@ from logicsponge.core import plot
 u = pint.UnitRegistry()
 
 
-class SourceState(TypedDict):
-    time: float
-    cells: float
-
-
 class Source(ls.SourceTerm):
-    state: ClassVar[SourceState] = {
-        "time": 0,
-        "cells": 10,
-    }
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.state = {
+            "time": 0,
+            "cells": 10,
+        }
 
     def run(self):
         # send measurmemt

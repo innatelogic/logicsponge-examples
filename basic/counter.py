@@ -35,9 +35,9 @@ class Counter(ls.FunctionTerm):
         if item["data"] % 2 == 0 or not self.only_even:
             self.counter += 1
         print("Counter: ", self.counter)
-        item["num"] = self.counter
-        print("Counter Flow: ", item)
-        return item
+        new_item = {"num": self.counter, **item}
+        print("Counter Flow: ", new_item)
+        return ls.DataItem(new_item)
 
 
 circuit = Source() * (Dump(name="source_dump") | (Sink() * Dump(name="sink_dump")) | Counter(only_even=True))
