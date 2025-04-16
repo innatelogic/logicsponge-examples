@@ -1,3 +1,5 @@
+"""A simple counter."""
+
 import time
 
 import logicsponge.core as ls
@@ -5,42 +7,48 @@ from logicsponge.core.logicsponge import Dump
 
 
 class Source(ls.SourceTerm):
-    def run(self):
-        while True:
-            out = (
-                ls.DataItem({"data": 1})
-                if len(self._output) == 0
-                else ls.DataItem({"data": self._output[-1]["data"] + 1})
-            )
-            print("\nSource: send", out)
-            self.output(out)
+    """A simple source."""
 
+    def run(self) -> None:
+        """Execute the run of the source."""
+        self.state["count"] = 0
+        while True:
+            out = ls.DataItem({"data": self.state["count"]})
+            print("\nSource: send", out)  # noqa: T201
+            self.output(out)
+            self.state["count"] += 1
             time.sleep(2)
 
 
 class Sink(ls.FunctionTerm):
+    """A simple sink."""
+
     def f(self, item: ls.DataItem) -> ls.DataItem:
-        time.sleep(2)
-        print("Sink: received", item)
+        """Call on new data."""
+        time.sleep(1)
+        print("Sink: received", item)  # noqa: T201
         return item
 
 
 class Counter(ls.FunctionTerm):
-    counter: int
+    """The counter."""
+
     only_even: bool
 
-    def __init__(self, *args, only_even: bool, **kwargs) -> None:
+    def __init__(self, *args, only_even: bool, **kwargs) -> None:  # noqa: ANN002, ANN003
+        """Create a Counter."""
         super().__init__(*args, only_even, **kwargs)
-        self.counter = 0
+        self.state["counter"] = 0
         self.only_even = only_even
 
     def f(self, item: ls.DataItem) -> ls.DataItem:
+        """Call on new data."""
         if item["data"] % 2 == 0 or not self.only_even:
-            self.counter += 1
-        print("Counter: ", self.counter)
-        item["num"] = self.counter
-        print("Counter Flow: ", item)
-        return item
+            self.state["counter"] += 1
+        print("Counter: ", self.state["counter"])  # noqa: T201
+
+        new_item = {"num": self.state["counter"], **item}
+        return ls.DataItem(new_item)
 
 
 circuit = Source() * (Dump(name="source_dump") | (Sink() * Dump(name="sink_dump")) | Counter(only_even=True))
