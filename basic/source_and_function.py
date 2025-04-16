@@ -1,3 +1,5 @@
+"""Example for a simple source and subsequent compute Term."""
+
 import time
 from typing import TypedDict
 
@@ -21,7 +23,7 @@ class Source(ls.SourceTerm):
         }
 
     def run(self) -> None:
-        """Run the source."""
+        """Run the source and terminate then."""
         for _ in range(10):
             # time to measure...
             time.sleep(0.1)
@@ -50,3 +52,4 @@ class Compute(ls.FunctionTerm):
 
 circuit = Source() * Compute() * ls.Print()
 circuit.start()
+circuit.join()
