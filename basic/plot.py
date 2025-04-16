@@ -6,6 +6,13 @@ from logicsponge.core import plot
 
 
 class Source(ls.SourceTerm):
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+        self.state = {
+            "time": 0,
+            "cells": 10,
+        }
+
     def run(self):
         self.state = {
             "time": 0,

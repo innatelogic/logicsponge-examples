@@ -1,5 +1,5 @@
 import time
-from typing import ClassVar, TypedDict
+from typing import TypedDict
 
 import logicsponge.core as ls
 
@@ -10,6 +10,17 @@ class SourceState(TypedDict):
 
 
 class Source(ls.SourceTerm):
+<<<<<<< HEAD
+=======
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+
+        self.state = {
+            "time": 0,  # * u.min,
+            "cells": 10,  # / u.mL,
+        }
+
+>>>>>>> b70c4485f8515ce0139f6602270fb6e0ab08b557
     def run(self):
         self.state = {
             "time": 0,
