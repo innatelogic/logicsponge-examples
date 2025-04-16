@@ -43,8 +43,7 @@ class Compute(ls.FunctionTerm):
             k += i
 
         # output the result
-        out = ls.DataItem({"time": item["time"], "cells": k})
-        return out
+        return ls.DataItem({"time": item["time"], "cells": k})
 
 
 circuit = Source() * (

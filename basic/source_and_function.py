@@ -10,27 +10,23 @@ class SourceState(TypedDict):
 
 
 class Source(ls.SourceTerm):
-<<<<<<< HEAD
-=======
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
+    """A simple source that provides time and cells at the time."""
 
+    def __init__(self, *args, **kwargs) -> None:
+        """Create a new Source and set its initial state."""
+        super().__init__(*args, **kwargs)
         self.state = {
             "time": 0,  # * u.min,
             "cells": 10,  # / u.mL,
         }
 
->>>>>>> b70c4485f8515ce0139f6602270fb6e0ab08b557
-    def run(self):
-        self.state = {
-            "time": 0,
-            "cells": 10,
-        }
+    def run(self) -> None:
+        """Run the source."""
         for _ in range(10):
             # time to measure...
             time.sleep(0.1)
 
-            # send measurmemt
+            # send measurement
             out = ls.DataItem(
                 {
                     "time": self.state["time"],
@@ -45,9 +41,11 @@ class Source(ls.SourceTerm):
 
 
 class Compute(ls.FunctionTerm):
+    """Simple compute that duplicates the cells."""
+
     def f(self, di: ls.DataItem) -> ls.DataItem:
-        out = ls.DataItem({"time": di["time"], "cells": di["cells"]})
-        return out
+        """The function called on all new data items."""
+        return ls.DataItem({"time": di["time"], "cells": di["cells"] * 2})
 
 
 circuit = Source() * Compute() * ls.Print()
