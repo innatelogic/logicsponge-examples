@@ -12,7 +12,7 @@ class Source(ls.SourceTerm):
         self.delays = delays
 
     def run(self):
-        while True:
+        for _ in range(3):
             delay = random.choice(self.delays)  # noqa: S311
             time.sleep(delay)
             out = ls.DataItem({self.key: datetime.now(UTC).strftime("%H:%M:%S")})

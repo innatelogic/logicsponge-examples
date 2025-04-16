@@ -13,7 +13,7 @@ class Source(ls.SourceTerm):
         self.sigma = sigma
 
     def run(self):
-        while True:
+        for _ in range(42):
             time.sleep(0.05)
             out = ls.DataItem({self.key: random.normalvariate(mu=self.mu, sigma=self.sigma)})
             self.output(out)
@@ -31,7 +31,7 @@ circuit1 = (
 
 circuit2 = (
     (Source("A", mu=0.0) | Source("B", mu=0.0) | Source("C", mu=1.0))
-    * ls.ToSingleStream(flatten=True)
+    * ls.MergeToSingleStream(flatten=True)
     * dashboard.Plot("Source (2)")
     * stats.KruskalWallis("t-Test")
     * ls.DataItemFilter(lambda d: d["p-value"] is not None)
