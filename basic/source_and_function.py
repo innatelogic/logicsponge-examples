@@ -2,9 +2,6 @@ import time
 from typing import TypedDict
 
 import logicsponge.core as ls
-import pint
-
-u = pint.UnitRegistry()
 
 
 class SourceState(TypedDict):
@@ -13,6 +10,8 @@ class SourceState(TypedDict):
 
 
 class Source(ls.SourceTerm):
+<<<<<<< HEAD
+=======
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
@@ -21,36 +20,35 @@ class Source(ls.SourceTerm):
             "cells": 10,  # / u.mL,
         }
 
+>>>>>>> b70c4485f8515ce0139f6602270fb6e0ab08b557
     def run(self):
-        # send measurmemt
-        out = ls.DataItem(
-            {
-                "time": self.state["time"],
-                "cells": self.state["cells"],
-            }
-        )
-        print("Source: send", out)
-        self.output(out)
+        self.state = {
+            "time": 0,
+            "cells": 10,
+        }
+        for _ in range(10):
+            # time to measure...
+            time.sleep(0.1)
 
-        # update state
-        self.state["time"] += 5  # * u.min
-        self.state["cells"] *= 1.1
+            # send measurmemt
+            out = ls.DataItem(
+                {
+                    "time": self.state["time"],
+                    "cells": self.state["cells"],
+                }
+            )
+            self.output(out)
 
-        # time to measure...
-        time.sleep(3)
+            # update state
+            self.state["time"] += 5  # * u.min
+            self.state["cells"] *= 1.1
 
 
-class Fit(ls.FunctionTerm):
+class Compute(ls.FunctionTerm):
     def f(self, di: ls.DataItem) -> ls.DataItem:
-        print("Fit: received", di)
-        time.sleep(0.5)
         out = ls.DataItem({"time": di["time"], "cells": di["cells"]})
-        print("Fit: send", out)
         return out
 
 
-circuit = Source() * Fit()
+circuit = Source() * Compute() * ls.Print()
 circuit.start()
-
-time.sleep(2)
-circuit.stop()

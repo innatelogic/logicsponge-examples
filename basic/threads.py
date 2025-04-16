@@ -1,54 +1,60 @@
+"""
+This is a simple code to demonstrate the use of threads in logicsponge.
+Run it an check your system's CPU usage.
+
+You should see all of the terms being run in parallel and, depending on your Python version,
+using different cores.
+"""
+
 import time
-from typing import ClassVar, TypedDict
 
 import logicsponge.core as ls
 
-# import innatelogic.v2.circuits.platereader as pr
-import pint
-
-u = pint.UnitRegistry()
-
-
-class SourceState(TypedDict):
-    time: float  # pint.Quantity
-    cells: float  # pint.Quantity
-
 
 class Source(ls.SourceTerm):
-    state: ClassVar[SourceState] = {
-        "time": 0,  # * u.min,
-        "cells": 10,  # / u.mL,
-    }
-
     def run(self):
-        # send measurmemt
-        out = ls.DataItem(
-            {
-                "time": self.state["time"],
-                "cells": self.state["cells"],
-            }
-        )
-        print("Source: send", out)
-        self.output(out)
+        self.state = {
+            "time": 0,
+            "cells": 10,
+        }
+        while True:
+            # time to measure...
+            time.sleep(0.1)
 
-        # update state
-        self.state["time"] += 5  # * u.min
-        self.state["cells"] *= 1.1
+            # send measurmemt
+            out = ls.DataItem(
+                {
+                    "time": self.state["time"],
+                    "cells": self.state["cells"],
+                }
+            )
+            self.output(out)
 
-        # time to measure...
-        time.sleep(1.5)
+            # update state
+            self.state["time"] += 5
+            self.state["cells"] *= 1.1
 
 
-class Fit(ls.FunctionTerm):
+class Compute(ls.FunctionTerm):
     def f(self, item: ls.DataItem) -> ls.DataItem:
-        print("Fit: received", item)
+        # something slow and computationally costly...
         k = 0
         for i in range(10000000):
             k += i
+
+        # output the result
         out = ls.DataItem({"time": item["time"], "cells": k})
-        print("Fit: send", out)
         return out
 
 
-circuit = Source() * (Fit("a") | Fit("b") | Fit("c") | Fit("d") | Fit("e") | Fit("f") | Fit("g") | Fit("h"))
+circuit = Source() * (
+    Compute("a")
+    | Compute("b")
+    | Compute("c")
+    | Compute("d")
+    | Compute("e")
+    | Compute("f")
+    | Compute("g")
+    | Compute("h")
+)
 circuit.start()
