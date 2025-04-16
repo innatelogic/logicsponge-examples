@@ -31,7 +31,7 @@ circuit1 = (
 
 circuit2 = (
     (Source("A", mu=0.0) | Source("B", mu=0.0) | Source("C", mu=1.0))
-    * ls.ToSingleStream()
+    * ls.MergeToSingleStream()
     * ls.Flatten()
     * dashboard.Plot("Source (2)")
     * stats.KruskalWallis("t-Test")
